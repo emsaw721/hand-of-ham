@@ -1,5 +1,6 @@
 const fs = require('fs')
 const express = require('express')
+const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json')
 
@@ -28,7 +29,15 @@ function createNewNote(body, notesArray) {
 
     return body; 
 }
-
+//3a)
+app.get('/api/notes', (req,res) => {
+    let results= notes;
+    console.log(results)
+    if(req.query) {
+        resutls = filterByQuery(req.query, results);
+    }
+    res.json(results)
+})
 //3b) 
 app.post('/api/notes', (req, res) => {
     //req.body is where incoming content will be 
@@ -39,4 +48,8 @@ app.post('/api/notes', (req, res) => {
     const note = createNewNote(req.body, notes);
 
     res.json(req.body); 
+})
+
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`); 
 })

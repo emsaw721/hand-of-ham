@@ -1,0 +1,26 @@
+{
+  "name": "hand-of-ham",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emsaw721/hand-of-ham.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emsaw721/hand-of-ham/issues"
+  },
+  "homepage": "https://github.com/emsaw721/hand-of-ham#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.2.1"
+  }
+}
