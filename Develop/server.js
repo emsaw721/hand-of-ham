@@ -16,7 +16,13 @@ const {notes} = require('./db/db.json')
     //a. DELETE /api/notes/:id should receive query parameter containing id of note. 
         //i) In order to delete, need to read all noties from db.json, remove given id, then rewrite notes to db.json 
 
-//1)
+
+// can use id to delete note 
+function findById(id, notesArray) {
+    const result = notesArray.filter(note => note.id === id)[0];
+    return result; 
+}
+
 
 function createNewNote(body, notesArray) {
     //body meaning request body 
@@ -29,13 +35,11 @@ function createNewNote(body, notesArray) {
 
     return body; 
 }
+
 //3a)
 app.get('/api/notes', (req,res) => {
     let results= notes;
     console.log(results)
-    if(req.query) {
-        resutls = filterByQuery(req.query, results);
-    }
     res.json(results)
 })
 //3b) 
