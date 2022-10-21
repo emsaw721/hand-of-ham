@@ -3,9 +3,9 @@ const express = require('express')
 const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
-const {notes} = require('./db/db.json')
+const {notes} = require('./db/db.json');
 // use for deleting the note, app.delete 
-// const uuid = require('./helpers/uuid'); 
+ const uuid = require('./helpers/uuid'); 
 // take from class work or npm install 
 
 app.use(express.urlencoded({ extended: true })); 
@@ -25,27 +25,6 @@ app.use(express.static(`public`))//before express, anything in public to root le
         //i) In order to delete, need to read all noties from db.json, remove given id, then rewrite notes to db.json 
 
 
-// can use id to delete note 
-// function findById(id, notesArray) {
-//     const result = notesArray.filter(note => note.id === id)[0];
-//     return result; 
-// }
-
-
-
-
-function createNewNote(body, notesArray) {
-    //body meaning request body 
-    //notesArray has same information as {notes} 
-    console.log(body)
-    const note = body; 
-    notesArray.push(note);
-
-    fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify({notes: notesArray}, null, 2));
-
-    return body; 
-}
-
 app.get('/', (req,res) => {
     console.log('Reached route'); 
     res.sendFile(path.join(__dirname, '/public/index.html'))
@@ -58,20 +37,41 @@ app.get('/notes', (req,res) => {
 
 //3a)
 app.get('/api/notes', (req,res) => {
-    let results= notes;
-    console.log(results)
-    res.json(results)
+   res.json(`${req.method} request received to get notes`)
+   console.info(`${req.method} request received to get notes`)
 })
+
 //3b) 
 app.post('/api/notes', (req, res) => {
-    //req.body is where incoming content will be 
-    // set id based on what the next index of array will be 
-    req.body.id = notes.length.toString();
+console.info(`${req.method} request received to add a new note.`)
+//req.body is where incoming content will be 
+    const { title, text } = req.body;
 
-    // add note to json file and notes array 
-    const note = createNewNote(req.body, notes);
+    if(title && text){
+        const newNote = {
+            title,
+            text,
+            note_id: uuid()
+        };
+        
+        const noteString = JSON.stringify(newNote)
+       
+        fs.writeFile(`./db/db.json`, noteString, (err) =>
+        err
+        ? console.error(err)
+        : console.log(
+            `A new note has been written to JSON file.`
+        ))
+        const response = {
+            status: 'success',
+            body: newNote 
+        }
 
-    res.json(req.body); 
+        console.log(response)
+        res.json(response)
+    }else{
+        res.json('Error in creating new note.'); 
+    }
 })
 
 app.listen(PORT, () => {
