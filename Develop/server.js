@@ -3,6 +3,13 @@ const express = require('express')
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json')
+// use for deleting the note, app.delete 
+// const uuid = require('./helpers/uuid'); 
+// take from class work or npm install 
+
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json()); 
+app.use(express.static(`public`))//before express, anything in public to root level 
 
 // 1) db.json used to store and retrieve notes using fs
 // 2) HTML routes created:
@@ -18,10 +25,12 @@ const {notes} = require('./db/db.json')
 
 
 // can use id to delete note 
-function findById(id, notesArray) {
-    const result = notesArray.filter(note => note.id === id)[0];
-    return result; 
-}
+// function findById(id, notesArray) {
+//     const result = notesArray.filter(note => note.id === id)[0];
+//     return result; 
+// }
+
+
 
 
 function createNewNote(body, notesArray) {
@@ -35,6 +44,16 @@ function createNewNote(body, notesArray) {
 
     return body; 
 }
+
+app.get('/', (req,res) => {
+    console.log('Reached route'); 
+    res.sendFile('/index.html')
+})
+
+app.get('/notes', (req,res) => {
+    console.log('Reached route!')
+    res.sendFile('/notes.html')
+})
 
 //3a)
 app.get('/api/notes', (req,res) => {
