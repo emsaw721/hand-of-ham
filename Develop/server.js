@@ -7,6 +7,7 @@ const {notes} = require('./db/db.json');
 // use for deleting the note, app.delete 
 //  const uuid = require('./helpers/uuid'); 
 const { v4: uuidv4 } = require('uuid'); 
+const { response } = require('express');
 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
@@ -48,6 +49,7 @@ app.post('/api/notes', (req, res) => {
 console.info(`${req.method} request received to add a new note.`)
 //req.body is where incoming content will be 
     const { title, text } = req.body;
+    console.log(req.body)
 
     if(title && text){
         const newNote = {
@@ -71,7 +73,7 @@ console.info(`${req.method} request received to add a new note.`)
         }
 
         console.log(response)
-        res.json(response)
+        res.json(req.body)
     }else{
         res.json('Error in creating new note.'); 
     }
