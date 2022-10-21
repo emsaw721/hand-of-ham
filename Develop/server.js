@@ -3,7 +3,7 @@ const express = require('express')
 const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
-const {notes} = require('./db/db.json');
+const notes = require('./db/db.json');
 const notesArr = []
 // use for deleting the note, app.delete 
 const { v4: uuidv4 } = require('uuid'); 
@@ -63,23 +63,17 @@ console.info(`${req.method} request received to add a new note.`)
 
         notesArr.push(noteString)
         
-        fs.writeFile(`./db/db.json`, noteString, (err) =>
+        for(i=0; i< notesArr.length; i++) {
+        fs.writeFileSync(path.join(__dirname, './db/db.json'), notesArr[i], (err) =>
         err
         ? console.error(err)
         : console.log(
             `A new note has been written to JSON file.`
         ))
-        const response = {
-            status: 'success',
-            body: newNote 
+      
+      // note text area wont clear with res.json, but keep getting cannot set headers after they are sent to client error message when 
+      //res.json 
         }
-
-        console.log(response)
-        res.json(response.body)
-    
-    
-    }else{
-        res.json('Error in creating new note.'); 
     }
 
 })
@@ -104,7 +98,7 @@ app.delete('/api/notes/:note_id', (req,res) => {
             }
         }
     } 
-    res.json('Note ID not found.')
+ 
 })
 
 app.listen(PORT, () => {
