@@ -4,7 +4,7 @@ const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json');
-const noteObj = { noteList: []}; 
+// const noteObj = { noteList: []}; 
 // use for deleting the note, app.delete 
 const { v4: uuidv4 } = require('uuid'); 
 
@@ -58,12 +58,13 @@ console.info(`${req.method} request received to add a new note.`)
             text,
             note_id: uuidv4()
         };
+        const noteArr = []
+        const noteString = JSON.stringify(newNote); 
+        noteArr.push(noteString)
 
-        noteList.push(newNote)
-        
-        const noteString = JSON.stringify(noteObj); 
+        for(let i=0; i<noteArr.length; i++) {
      
-        fs.writeFile(`./db/db.json`, noteString, (err) =>
+        fs.writeFile(`./db/db.json`, noteArr[i], (err) =>
         err
         ? console.error(err)
         : console.log(
@@ -71,15 +72,17 @@ console.info(`${req.method} request received to add a new note.`)
         ))
         const response = {
             status: 'success',
-            body: noteString
+            body: newNote 
         }
 
         console.log(response)
         res.json(response.body)
+    }
     
     }else{
         res.json('Error in creating new note.'); 
     }
+
 })
 
 // app.delete('/notes', (req,res) => {
