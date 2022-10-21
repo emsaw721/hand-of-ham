@@ -4,7 +4,7 @@ const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json');
-// const noteObj = { noteList: []}; 
+const notesArr = []
 // use for deleting the note, app.delete 
 const { v4: uuidv4 } = require('uuid'); 
 
@@ -58,13 +58,12 @@ console.info(`${req.method} request received to add a new note.`)
             text,
             note_id: uuidv4()
         };
-        const noteArr = []
+        
         const noteString = JSON.stringify(newNote); 
-        noteArr.push(noteString)
 
-        for(let i=0; i<noteArr.length; i++) {
-     
-        fs.writeFile(`./db/db.json`, noteArr[i], (err) =>
+        notesArr.push(noteString)
+        
+        fs.writeFile(`./db/db.json`, noteString, (err) =>
         err
         ? console.error(err)
         : console.log(
@@ -77,7 +76,7 @@ console.info(`${req.method} request received to add a new note.`)
 
         console.log(response)
         res.json(response.body)
-    }
+    
     
     }else{
         res.json('Error in creating new note.'); 
@@ -85,13 +84,28 @@ console.info(`${req.method} request received to add a new note.`)
 
 })
 
-// app.delete('/notes', (req,res) => {
 
-// })
+app.delete('/api/notes/:note_id', (req,res) => {
+    if(req.body && req.params.note_id) {
+        const noteID = req.params.note_id;
+        for(let i=0; i<notesArr.length; i++){
+            const currentNote = notesArr[i];
 
-// app.delete('/api/notes', (req,res) => {
+            if(currentNote.note_id === noteID){
+                let newNotes = notesArr.splice(currentNote,1);
+                let newString = JSON.stringify(newNotes)
+                fs.writeFile(`./db/db.json`, newString, (err) =>
+                err
+                ? console.error(err)
+                : console.log(
+                    `A new note has been written to JSON file.`
+                ))
 
-// })
+            }
+        }
+    } 
+    res.json('Note ID not found.')
+})
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`); 
