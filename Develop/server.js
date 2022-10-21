@@ -6,7 +6,7 @@ const app = express();
 const {notes} = require('./db/db.json');
 // use for deleting the note, app.delete 
 //  const uuid = require('./helpers/uuid'); 
-
+const { v4: uuidv4 } = require('uuid'); 
 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
@@ -53,7 +53,8 @@ console.info(`${req.method} request received to add a new note.`)
         const newNote = {
             title,
             text,
-            note_id: uuid()
+            // note_id: uuid()
+            note_id: uuidv4()
         };
         
         const noteString = JSON.stringify(newNote)
