@@ -25,11 +25,13 @@ app.use(express.static(`public`))//before express, anything in public to root le
         //i) In order to delete, need to read all noties from db.json, remove given id, then rewrite notes to db.json 
 
 
+
+//2b) kind of, need to have *
 app.get('/', (req,res) => {
     console.log('Reached route'); 
     res.sendFile(path.join(__dirname, '/public/index.html'))
 })
-
+//2a) 
 app.get('/notes', (req,res) => {
     console.log('Reached route!')
     res.sendFile(path.join(__dirname, '/public/notes.html'))
