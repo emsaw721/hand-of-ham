@@ -4,10 +4,10 @@ const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json');
+const noteObj = { noteList: []}; 
 // use for deleting the note, app.delete 
-//  const uuid = require('./helpers/uuid'); 
 const { v4: uuidv4 } = require('uuid'); 
-const { response } = require('express');
+
 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
@@ -42,6 +42,7 @@ app.get('/notes', (req,res) => {
 app.get('/api/notes', (req,res) => {
    res.json(`${req.method} request received to get notes`)
    console.info(`${req.method} request received to get notes`)
+   res.json(notes) 
 })
 
 //3b) 
@@ -55,12 +56,13 @@ console.info(`${req.method} request received to add a new note.`)
         const newNote = {
             title,
             text,
-            // note_id: uuid()
             note_id: uuidv4()
         };
+
+        noteList.push(newNote)
         
-        const noteString = JSON.stringify(newNote)
-       
+        const noteString = JSON.stringify(noteObj); 
+     
         fs.writeFile(`./db/db.json`, noteString, (err) =>
         err
         ? console.error(err)
@@ -69,15 +71,24 @@ console.info(`${req.method} request received to add a new note.`)
         ))
         const response = {
             status: 'success',
-            body: newNote 
+            body: noteString
         }
 
         console.log(response)
-        res.json(req.body)
+        res.json(response.body)
+    
     }else{
         res.json('Error in creating new note.'); 
     }
 })
+
+// app.delete('/notes', (req,res) => {
+
+// })
+
+// app.delete('/api/notes', (req,res) => {
+
+// })
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`); 
