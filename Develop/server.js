@@ -5,8 +5,8 @@ const PORT= process.env.PORT || 3001;
 const app = express(); 
 const {notes} = require('./db/db.json');
 // use for deleting the note, app.delete 
- const uuid = require('./helpers/uuid'); 
-// take from class work or npm install 
+//  const uuid = require('./helpers/uuid'); 
+
 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
