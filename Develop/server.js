@@ -1,5 +1,6 @@
 const fs = require('fs')
 const express = require('express')
+const path = require('path');
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
 const {notes} = require('./db/db.json')
@@ -47,12 +48,12 @@ function createNewNote(body, notesArray) {
 
 app.get('/', (req,res) => {
     console.log('Reached route'); 
-    res.sendFile('/index.html')
+    res.sendFile(path.join(__dirname, '/public/index.html'))
 })
 
 app.get('/notes', (req,res) => {
     console.log('Reached route!')
-    res.sendFile('/notes.html')
+    res.sendFile(path.join(__dirname, '/public/notes.html'))
 })
 
 //3a)

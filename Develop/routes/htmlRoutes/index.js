@@ -1,11 +1,16 @@
+// const express = require('express')
+// const path = require('path');
+// const router = express.Router();
+// router.use(express.static(`public`))//before express, anything in public to root level 
 
-const path = require('path');
-const router = require('express').Router();
+// router.get('*', (req,res) => {
+//     console.log('Router reached')
+//     res.sendFile(path.join(__dirname, '/index.html'))
+// });
 
-router.get('/', (req,res) => {
-    res.sendFile(path,join(__dirname, '../../public/index.html'))
-});
+// router.get('/notes', (req,res)=> {
+//     console.log('Reached router!')
+//     res.sendFile(path.join(__dirname, '/notes.html')); 
+// })
 
-router.get('/notes', (req,res)=> {
-    res.sendFile(path.join(__dirname, '../../public/notes.html')); 
-})
+// module.exports= router; 
