@@ -42,7 +42,7 @@ app.get('/notes', (req,res) => {
 app.get('/api/notes', (req,res) => {
    res.json(`${req.method} request received to get notes`)
    console.info(`${req.method} request received to get notes`)
-   res.json(notes) 
+  
 })
 
 //3b) 
@@ -62,21 +62,28 @@ console.info(`${req.method} request received to add a new note.`)
         const noteString = JSON.stringify(newNote); 
 
         notesArr.push(noteString)
-        
-        for(i=0; i< notesArr.length; i++) {
-        fs.writeFileSync(path.join(__dirname, './db/db.json'), notesArr[i], (err) =>
+
+        fs.writeFile(`./db/db.json`, noteString, (err) =>
         err
         ? console.error(err)
         : console.log(
             `A new note has been written to JSON file.`
         ))
-      
-      // note text area wont clear with res.json, but keep getting cannot set headers after they are sent to client error message when 
-      //res.json 
+
+        const response = {
+            status: 'success',
+            body: newNote 
         }
+        console.log(response)
+      res.json(response)
     }
 
 })
+
+// function createNewNote() {
+//     fs.writeFile('./db/db.json', JSON.stringify(notesArr))
+ 
+// }
 
 
 app.delete('/api/notes/:note_id', (req,res) => {
@@ -98,7 +105,7 @@ app.delete('/api/notes/:note_id', (req,res) => {
             }
         }
     } 
- 
+    
 })
 
 app.listen(PORT, () => {
