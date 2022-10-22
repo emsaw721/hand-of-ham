@@ -60,31 +60,44 @@ console.info(`${req.method} request received to add a new note.`)
         };
         
         const noteString = JSON.stringify(newNote); 
-
         notesArr.push(noteString)
+        // notesArr.forEach(createNewNote(noteString))
 
-        fs.writeFile(`./db/db.json`, JSON.stringify(notesArr), (err) =>
-        err
-        ? console.error(err)
-        : console.log(
-            `A new note has been written to JSON file.`
-        ))
+        for(i=0; i< notesArr.length; i++) {
+            fs.writeFile(`./db/db.json`, notesArr[i], (err) =>
+                err
+                ? console.error(err)
+                : console.log(
+                `A new note has been written to JSON file.`
+            ))
 
-        const response = {
+            const response = {
             status: 'success',
             body: newNote 
-        }
-        console.log(response)
-      res.json(response)
-    }
+            }
 
+        console.log(response)
+        return res.json(response)
+        }
+}
 })
 
 // function createNewNote() {
-//     fs.writeFile('./db/db.json', JSON.stringify(notesArr))
- 
-// }
+// fs.writeFile(`./db/db.json`,notesArr[i] , (err) =>
+// err
+// ? console.error(err)
+// : console.log(
+//     `A new note has been written to JSON file.`
+// ))
 
+// const response = {
+//     status: 'success',
+//     body: newNote 
+// }
+// console.log(response)
+// return res.json(response)
+
+// }
 
 app.delete('/api/notes/:note_id', (req,res) => {
     if(req.body && req.params.note_id) {
