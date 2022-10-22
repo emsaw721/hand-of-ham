@@ -1,21 +1,21 @@
-const fs = require('fs')
-const path = require('path');
-const express = require('express')
-const app = express(); 
-app.use(express.static(`/public`))//before express, anything in public to root level 
-// const router = require('express').Router(); 
+// const fs = require('fs')
+// const path = require('path');
+// const express = require('express')
+// const app = express(); 
+// app.use(express.static(`/public`))//before express, anything in public to root level 
+// // const router = require('express').Router(); 
 
-function htmlRoutes() {
-//2b) kind of, need to have *
-app.get('/', (req,res) => {
-    console.log('Reached route'); 
-    res.sendFile('/public/index.html')
-})
-//2a) 
-app.get('/notes', (req,res) => {
-    console.log('Reached route!')
-    res.sendFile('/public/notes.html')
-})
-}
+// function htmlRoutes() {
+// //2b) kind of, need to have *
+// app.get('/', (req,res) => {
+//     console.log('Reached route'); 
+//     res.sendFile('/public/index.html')
+// })
+// //2a) 
+// app.get('/notes', (req,res) => {
+//     console.log('Reached route!')
+//     res.sendFile('/public/notes.html')
+// })
+// }
 
-module.exports = htmlRoutes(); 
+// module.exports = htmlRoutes(); 
