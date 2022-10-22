@@ -63,7 +63,7 @@ console.info(`${req.method} request received to add a new note.`)
 
         notesArr.push(noteString)
 
-        fs.writeFile(`./db/db.json`, noteString, (err) =>
+        fs.writeFile(`./db/db.json`, JSON.stringify(notesArr), (err) =>
         err
         ? console.error(err)
         : console.log(
