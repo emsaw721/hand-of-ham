@@ -5,7 +5,6 @@ const notesArr = []
 const express = require('express')
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
- // use for deleting the note, app.delete 
 const { v4: uuidv4 } = require('uuid'); 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json()); 
@@ -21,7 +20,7 @@ app.use(express.static(`public`))//before express, anything in public to root le
         //i) need to find a way to give each note a unique id when saved --> look for npm package 
 //4) BONUS: add delete route 
     //a. DELETE /api/notes/:id should receive query parameter containing id of note. 
-        //i) In order to delete, need to read all noties from db.json, remove given id, then rewrite notes to db.json 
+        //i) In order to delete, need to read all notes from db.json, remove given id, then rewrite notes to db.json 
 
 //2b) kind of, need to have *, just doesn't work with a * 
 app.get('/', (req,res) => {
@@ -45,7 +44,7 @@ app.get('/notes', (req,res) => {
 app.get('/api/notes', (req,res) => {
     res.json(`${req.method} request received to get notes`)
     console.info(`${req.method} request received to get notes`)
- })
+})
 
  //3b) 
 app.post('/api/notes', (req, res) => {
@@ -78,16 +77,21 @@ app.post('/api/notes', (req, res) => {
         
             // return note to client 
             res.json(response)
-    }
-     fs.readFile(`./db/db.json`, (err, data) => {
-        if(err) throw err; 
-        let notesData = JSON.parse(data)
-        console.log(notesData)
-        // // res.append
-        // res.render(notesData.title)
-    })
-    })
+        }
+})
 
+// app.post('/api/notes', (req,res) =>{
+//     fs.readFile(`./db/db.json`, (err, data) => {
+//         if(err) throw err; 
+//         // let notesData = JSON.parse(data)
+
+//     //appends specified value to http response 
+//         // res.append(data.title)
+//         console.log(data.title)
+//     })
+// })
+
+// 4)
 // app.delete('/api/notes/:note_id', (req,res) => {
 //     if(req.body && req.params.note_id) {
 //         const noteID = req.params.note_id;
@@ -97,17 +101,13 @@ app.post('/api/notes', (req, res) => {
 //             if(currentNote.note_id === noteID){
 //                 let newNotes = notesArr.splice(currentNote,1);
 //                 let newString = JSON.stringify(newNotes)
-//                 fs.writeFile(`./db/db.json`, newString, (err) =>
-//                 err
-//                 ? console.error(err)
-//                 : console.log(
-//                     `A new note has been written to JSON file.`
-//                 ))
-
+//                 fs.writeFile(`./db/db.json`, newString, (err) => {
+//                  if(err) throw err; 
+//                 console.log(`A new note has been written to JSON file.`)
+//                  )}
 //             }
 //         }
 //     } 
-    
 // })
 
 
