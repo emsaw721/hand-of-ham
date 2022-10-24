@@ -23,12 +23,18 @@ app.use(express.static(`public`))//before express, anything in public to root le
     //a. DELETE /api/notes/:id should receive query parameter containing id of note. 
         //i) In order to delete, need to read all noties from db.json, remove given id, then rewrite notes to db.json 
 
-//2b) kind of, need to have *
+//2b) kind of, need to have *, just doesn't work with a * 
 app.get('/', (req,res) => {
     console.log('Reached route'); 
     res.sendFile(path.join(__dirname, '/public/index.html'))
-    res.render("notes", {data: notes})
 })
+
+// app.get('*', (req,res) => {
+//     console.log('Reached route');
+//     res.sendFile(path.join(__dirname, '/public/index.html'))
+// })
+
+
 //2a) 
 app.get('/notes', (req,res) => {
     console.log('Reached route!')
@@ -39,13 +45,6 @@ app.get('/notes', (req,res) => {
 app.get('/api/notes', (req,res) => {
     res.json(`${req.method} request received to get notes`)
     console.info(`${req.method} request received to get notes`)
-    // I can't remember what I was doing with this. 
-    fs.readFile(`./db/db.json`, (err, data) => {
-        if(err) throw err; 
-        let notesData = JSON.parse(data)
-        console.log(notesData)
-    })
-   
  })
 
  //3b) 
@@ -61,22 +60,32 @@ app.post('/api/notes', (req, res) => {
                 note_id: uuidv4()
             };
             
-            const noteString = JSON.stringify(newNote); 
-            notesArr.push(noteString)
+            notesArr.push(newNote)
+            console.log(notesArr)
         
-                fs.writeFile(`./db/db.json`, noteString, (err) => {
+            notesArr.forEach(element => {
+               
+                fs.writeFile(`./db/db.json`, JSON.stringify(element), (err) => {
                 if(err) throw err
                    console.log(`A new note has been written to JSON file.`)
                  })
-    
+                })
+
                 const response = {
                 status: 'success',
                 body: newNote 
                 }
+        
             // return note to client 
             res.json(response)
-       
     }
+     fs.readFile(`./db/db.json`, (err, data) => {
+        if(err) throw err; 
+        let notesData = JSON.parse(data)
+        console.log(notesData)
+        // // res.append
+        // res.render(notesData.title)
+    })
     })
 
 // app.delete('/api/notes/:note_id', (req,res) => {
