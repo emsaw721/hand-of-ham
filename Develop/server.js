@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path') 
-const notes = require('./db/db.json');
+const {notes} = require('./db/db.json');
 const notesArr = []
 const express = require('express')
 const PORT= process.env.PORT || 3001; 
@@ -27,6 +27,7 @@ app.use(express.static(`public`))//before express, anything in public to root le
 app.get('/', (req,res) => {
     console.log('Reached route'); 
     res.sendFile(path.join(__dirname, '/public/index.html'))
+    res.render("notes", {data: notes})
 })
 //2a) 
 app.get('/notes', (req,res) => {
@@ -38,6 +39,7 @@ app.get('/notes', (req,res) => {
 app.get('/api/notes', (req,res) => {
     res.json(`${req.method} request received to get notes`)
     console.info(`${req.method} request received to get notes`)
+    // I can't remember what I was doing with this. 
     fs.readFile(`./db/db.json`, (err, data) => {
         if(err) throw err; 
         let notesData = JSON.parse(data)
@@ -61,10 +63,8 @@ app.post('/api/notes', (req, res) => {
             
             const noteString = JSON.stringify(newNote); 
             notesArr.push(noteString)
-            // notesArr.forEach(createNewNote(noteString))
-    
-            // for(i=0; i< notesArr.length; i++) {
-                fs.writeFile(`./db/db.json`, noteString, (err) =>{
+        
+                fs.writeFile(`./db/db.json`, noteString, (err) => {
                 if(err) throw err
                    console.log(`A new note has been written to JSON file.`)
                  })
@@ -73,13 +73,13 @@ app.post('/api/notes', (req, res) => {
                 status: 'success',
                 body: newNote 
                 }
-    
-            return res.json(response)
-            // }
+            // return note to client 
+            res.json(response)
+       
     }
     })
 
-// router.delete('/api/notes/:note_id', (req,res) => {
+// app.delete('/api/notes/:note_id', (req,res) => {
 //     if(req.body && req.params.note_id) {
 //         const noteID = req.params.note_id;
 //         for(let i=0; i<notesArr.length; i++){
@@ -101,23 +101,6 @@ app.post('/api/notes', (req, res) => {
     
 // })
 
-
-// function createNewNote() {
-// fs.writeFile(`./db/db.json`,notesArr[i] , (err) =>
-// err
-// ? console.error(err)
-// : console.log(
-//     `A new note has been written to JSON file.`
-// ))
-
-// const response = {
-//     status: 'success',
-//     body: newNote 
-// }
-// console.log(response)
-// return res.json(response)
-
-// }
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`); 
