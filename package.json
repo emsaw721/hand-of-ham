@@ -1,0 +1,28 @@
+{
+  "name": "note-taker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "jest": "^29.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emsaw721/hand-of-ham.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/emsaw721/hand-of-ham/issues"
+  },
+  "homepage": "https://github.com/emsaw721/hand-of-ham#readme"
+}
