@@ -63,22 +63,19 @@ app.post('/api/notes', (req, res) => {
             notesArr.push(noteString)
             // notesArr.forEach(createNewNote(noteString))
     
-            for(i=0; i< notesArr.length; i++) {
-                fs.writeFile(`./db/db.json`, notesArr[i], (err) =>
-                    err
-                    ? console.error(err)
-                    : console.log(
-                    `A new note has been written to JSON file.`
-                ))
+            // for(i=0; i< notesArr.length; i++) {
+                fs.writeFile(`./db/db.json`, noteString, (err) =>{
+                if(err) throw err
+                   console.log(`A new note has been written to JSON file.`)
+                 })
     
                 const response = {
                 status: 'success',
                 body: newNote 
                 }
     
-            // console.log(response)
             return res.json(response)
-            }
+            // }
     }
     })
 
