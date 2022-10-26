@@ -1,10 +1,11 @@
 // make sure that db.json is array: looks like this [{}]
-//
+//wasn't working before because basically writing a new file for every note object that we created 
+// double check other id to make sure doesn't need to be note_id
 
-const fs = require('fs')
-const path = require('path') 
-const notes = require('./db/db.json');
-
+const fs = require('fs'); 
+const path = require('path');
+// alternative way to do this is to call notes in each query, but here, we just call it once 
+let notes = require('./db/db.json');
 const express = require('express')
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
@@ -80,11 +81,24 @@ app.post('/api/notes', (req, res) => {
 })
 
 // 4)
-// app.delete('/api/notes/:note_id', (req,res) => {
+app.delete('/api/notes/:note_id', (req,res) => {
+  
+
+     notes = notes.filter(({ note_id }) => note_id !== req.params.note_id);
+    
+
+     fs.writeFile(`./db/db.json`, JSON.stringify(notes), (err) => {
+        if(err){
+            res.send(err)
+        }
+     })
+     res.json(notes) 
+    
+}); 
 //     if(req.body && req.params.note_id) {
 //         const noteID = req.params.note_id;
-//         for(let i=0; i<notesArr.length; i++){
-//             const currentNote = notesArr[i];
+//        
+//             const currentNote = req.params.note_id;
 
 //             if(currentNote.note_id === noteID){
 //                 let newNotes = notesArr.splice(currentNote,1);
@@ -94,7 +108,7 @@ app.post('/api/notes', (req, res) => {
 //                 console.log(`A new note has been written to JSON file.`)
 //                  )}
 //             }
-//         }
+//         
 //     } 
 // })
 
