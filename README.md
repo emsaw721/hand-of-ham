@@ -8,7 +8,7 @@ Note Taker is an application that can be used to write and save notes. This appl
 
 [Installation](#installation)
 [Usage](#usage)
-[Future Iteratins](#future-iterations)
+[Future Iterations](#future-iterations)
 [License](#license)
 
 ## Installation 
