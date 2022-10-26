@@ -1,21 +1,32 @@
-// const fs = require('fs')
+
 // const path = require('path');
+
 // const express = require('express')
-// const app = express(); 
-// app.use(express.static(`/public`))//before express, anything in public to root level 
-// // const router = require('express').Router(); 
 
-// function htmlRoutes() {
-// //2b) kind of, need to have *
-// app.get('/', (req,res) => {
+// const router = express.Router(); 
+
+// router.use(express.urlencoded({ extended: true })); 
+// router.use(express.json()); 
+// router.use(express.static(`public`))//before express, anything in public to root level 
+
+
+// //2b) the * version is down at the bottom because otherwise will override other routes
+// router.get('/', (req,res) => {
 //     console.log('Reached route'); 
-//     res.sendFile('/public/index.html')
+//     // path is everything up until where the directory is at, join to smash the new stuff together 
+//     res.sendFile(path.join(__dirname, '../public/index.html'))
 // })
-// //2a) 
-// app.get('/notes', (req,res) => {
-//     console.log('Reached route!')
-//     res.sendFile('/public/notes.html')
-// })
-// }
 
-// module.exports = htmlRoutes(); 
+// //2a) 
+// router.get('/notes', (req,res) => {
+//     console.log('Reached route!')
+//     res.sendFile(path.join(__dirname, '../public/notes.html'))
+// })
+
+// //needs to be last or else will override other routes 
+// router.get('*', (req,res) => {
+//     console.log('Reached route');
+//     res.sendFile(path.join(__dirname, '../public/index.html'))
+// });
+
+// module.exports = router; 
