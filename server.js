@@ -1,7 +1,10 @@
+// make sure that db.json is array: looks like this [{}]
+//
+
 const fs = require('fs')
 const path = require('path') 
-const {notes} = require('./db/db.json');
-const notesArr = []
+const notes = require('./db/db.json');
+
 const express = require('express')
 const PORT= process.env.PORT || 3001; 
 const app = express(); 
@@ -28,21 +31,22 @@ app.get('/', (req,res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'))
 })
 
-// app.get('*', (req,res) => {
-//     console.log('Reached route');
-//     res.sendFile(path.join(__dirname, '/public/index.html'))
-// })
-
-
 //2a) 
 app.get('/notes', (req,res) => {
     console.log('Reached route!')
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 })
 
+//needs to be last or else will override other routes 
+// app.get('*', (req,res) => {
+//     console.log('Reached route');
+//     res.sendFile(path.join(__dirname, '/public/index.html'))
+// })
+
 //3a)
 app.get('/api/notes', (req,res) => {
-    res.json(`${req.method} request received to get notes`)
+    // res.json will stringify it 
+    res.json(notes)
     console.info(`${req.method} request received to get notes`)
 })
 
@@ -59,16 +63,11 @@ app.post('/api/notes', (req, res) => {
                 note_id: uuidv4()
             };
             
-            notesArr.push(newNote)
-            console.log(notesArr)
-        
-            notesArr.forEach(element => {
-               
-                fs.writeFile(`./db/db.json`, JSON.stringify(element), (err) => {
+            notes.push(newNote)
+                fs.writeFile(`./db/db.json`, JSON.stringify(notes), (err) => {
                 if(err) throw err
                    console.log(`A new note has been written to JSON file.`)
                  })
-                })
 
                 const response = {
                 status: 'success',
@@ -76,7 +75,7 @@ app.post('/api/notes', (req, res) => {
                 }
         
             // return note to client 
-            res.json(response)
+            res.json(notes)
         }
 })
 
